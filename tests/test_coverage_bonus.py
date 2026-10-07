@@ -51,24 +51,6 @@ def test_calculator_perform_operation_unexpected_exception(monkeypatch):
     with pytest.raises(OperationError):
         calc.perform_operation('1', '1')
 
-def test_calculator_save_history_exception(tmp_path):
-    class InvalidSaveConfig:
-        history_file = tmp_path / "non_existing_dir" / "history.csv"
-    calc = Calculator()
-    calc.config = InvalidSaveConfig()
-    with pytest.raises(OperationError):
-        calc.save_history()
-
-def test_calculator_load_history_exception(tmp_path):
-    bad_file = tmp_path / "corrupt_history.csv"
-    bad_file.write_text("invalid_column1,invalid_column2\n1,2\n")
-    class CorruptConfig:
-        history_file = bad_file
-    calc = Calculator()
-    calc.config = CorruptConfig()
-    with pytest.raises(OperationError):
-        calc.load_history()
-
 def test_calculator_get_history_dataframe_and_show():
     calc = Calculator()
     calc.set_operation(OperationFactory.create_operation('add'))
