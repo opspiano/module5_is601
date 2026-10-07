@@ -60,10 +60,12 @@ def test_calculator_save_history_exception(tmp_path):
         calc.save_history()
 
 def test_calculator_load_history_exception(tmp_path):
-    class DirectoryConfig:
-        history_file = tmp_path
+    bad_file = tmp_path / "corrupt_history.csv"
+    bad_file.write_text("invalid_column1,invalid_column2\n1,2\n")
+    class CorruptConfig:
+        history_file = bad_file
     calc = Calculator()
-    calc.config = DirectoryConfig()
+    calc.config = CorruptConfig()
     with pytest.raises(OperationError):
         calc.load_history()
 
